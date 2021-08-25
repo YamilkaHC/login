@@ -1,20 +1,22 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Layout from '../components/layouts/Layout'
-import Form from '../components/Form'
+import SignInForm from '../components/SignInForm'
 
 
-const Home = () => {
+
+const signin = () => {
   return (
 
-    <>
+    
     <Layout titlePage = {"Login"}>
-      <h1>log in</h1>
-      <Form></Form>
+      <h1>Sign In</h1>
+      <SignInForm/>
     </Layout>
-    </>
+ 
 
   )
 }
 
-export default Home
+
+export default signin

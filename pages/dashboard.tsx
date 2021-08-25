@@ -4,17 +4,17 @@ import Layout from '../components/layouts/Layout'
 import Form from '../components/Form'
 
 
-const Home = () => {
+const dashboard= () => {
   return (
 
-    <>
-    <Layout titlePage = {"Login"}>
-      <h1>log in</h1>
-      <Form></Form>
+ 
+    <Layout titlePage = {"Dashboard"}>
+      <h1>Dashboard</h1>
+
     </Layout>
-    </>
+
 
   )
 }
 
-export default Home
+export default dashboard
