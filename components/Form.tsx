@@ -23,11 +23,6 @@ const Form: any = () => {
      }
     `;
 
-    const [alert, setalert] = useState({
-        state: 'no-alert',
-        message: ''
-    })
-
     const [pushUser, { loading }] = useMutation(PUSHUSER, {
 
         variables: { email: data.email, password: data.password },
@@ -38,6 +33,11 @@ const Form: any = () => {
             router.push('/dashboard');
         }
     });
+
+    const [alert, setalert] = useState({
+        state: 'no-alert',
+        message: ''
+    })
 
     const validation = (email: any, password: any) => {
         const re = /\S+@\S+\.\S+/;

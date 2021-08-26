@@ -59,8 +59,7 @@ const dashboard = ({ getUsers }: any) => {
 }
 
 export async function getServerSideProps() {
-  const { data }: any = await ({
-    query: gql`
+  const GETUSERS =  gql`
               query{
                 getUsers{
                   id
@@ -68,13 +67,15 @@ export async function getServerSideProps() {
                   email
                 }
               }
-    `,
-  });
-
+    `;
+  const { loading, error, data: datauser } = useQuery(GETUSERS);
+  
+  
+  
   return {
     props: {
-      getUsers: data.getUsers,
-    },
+      getUsers: datauser.getUsers
+    }
   };
 }
 
