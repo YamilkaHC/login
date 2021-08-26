@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { ApolloError, gql } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import Router from 'next/router'
-
+import Link from 'next/link'
 
 
 const SignInForm: any = () => {
@@ -133,6 +133,10 @@ const SignInForm: any = () => {
                     <input type="text" id="password" className="fadeIn third" name="password" placeholder="password" onChange={e => handleChange(e)} />
                     <p className={alert.state}>{alert.message}</p>
                     <input type="submit" className="fadeIn fourth" value="Sign In" />
+                    <p>Do you have an account?
+                        <Link href="/">
+                            <a> Log In</a>
+                        </Link></p>
                 </form>
             </div>
         </div>
