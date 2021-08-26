@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { isAuthenticated } from '../components/authentication'
 
-/*export const getServerSideProps = isAuthenticated;*/
+export const getServerSideProps = isAuthenticated;
 
 const dashboard = ({ getUsers }: any) => {
 
@@ -30,12 +30,6 @@ const dashboard = ({ getUsers }: any) => {
   if (error) return `Error! ${error.message}`;
 */
 
-
-
-
-
-
-
   return (
 
 
@@ -58,25 +52,6 @@ const dashboard = ({ getUsers }: any) => {
   )
 }
 
-export async function getServerSideProps() {
-  const GETUSERS =  gql`
-              query{
-                getUsers{
-                  id
-                  name
-                  email
-                }
-              }
-    `;
-  const { loading, error, data: datauser } = useQuery(GETUSERS);
-  
-  
-  
-  return {
-    props: {
-      getUsers: datauser.getUsers
-    }
-  };
-}
+
 
 export default dashboard
