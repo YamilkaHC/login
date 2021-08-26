@@ -1,32 +1,40 @@
 import React from 'react'
 import { useState } from 'react'
 import { ApolloError, gql } from "@apollo/client";
-// import client from "../apollo-client";
 import { useMutation } from "@apollo/client";
-
+import Router from 'next/router'
 
 
 
 const SignInForm: any = () => {
 
-    const PUSHUSER = gql`
-        mutation pushUser($text: String!) {
-            pushUser(text: $text) {
-                id
-                text
-            }
-        }
-`;
+    
     const [Udata, setData] = useState({
         name: '',
         email: '',
         password: ''
     })
+
+    const PUSHUSER = gql`
+    mutation {
+        register(
+            data:{
+                name: "${Udata.name}", 
+                email: "${Udata.email}", 
+                password: "${Udata.password}"
+            }) 
+            {
+          id
+          name
+          email
+        }   
+      }`;
+
+
     const [alert, setalert] = useState({
         state: 'no-alert',
         message: ''
     })
-
 
     const [pushUser, {  loading }] = useMutation(PUSHUSER, {
         variables: { name: Udata.name, email: Udata.email, password: Udata.password },
@@ -34,9 +42,10 @@ const SignInForm: any = () => {
         onCompleted: () => console.log('success')
     }
     );
-
+    
     const validation = (name: any, email: any, password: any) => {
         const re = /\S+@\S+\.\S+/;
+        const number =/\d/;
 
         if (email == '' || password == '' || name == '') {
 
@@ -52,13 +61,42 @@ const SignInForm: any = () => {
                 message: 'incorrect email'
             })
             return
+
+        } 
+        if (!(/\d/.test(password))){
+            setalert({
+                state: 'alert',
+                message: 'You need include numbers in your password'
+            })
+            return
+        }
+        if (!(/[a-z]/.test(password))){
+            setalert({
+                state: 'alert',
+                message: 'You need include lowercase letter in your password'
+            })
+            return
+        }
+        if (!(/[A-Z]/.test(password))){
+            setalert({
+                state: 'alert',
+                message: 'You need include uppercase letter in your password'
+            })
+            return
+        }
+
+        if (!(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password))){
+            setalert({
+                state: 'alert',
+                message: 'You need include symbols in your password'
+            })
+            return
         }
 
         pushUser();
 
 
     }
-
 
     const handleSubmit = (e: any) => {
 
@@ -78,6 +116,7 @@ const SignInForm: any = () => {
     }
 
     if (loading) return 'Submitting...';
+    redirectTo: '/login' 
 
     return (
 
@@ -88,7 +127,6 @@ const SignInForm: any = () => {
                 <form onSubmit={(e) => {
                     e.preventDefault();
                     handleSubmit(e);
-                    
                 }}>
                     <input type="text" id="name" className="fadeIn second" name="name" placeholder="name" onChange={e => handleChange(e)} />
                     <input type="text" id="login" className="fadeIn second" name="email" placeholder="email" onChange={e => handleChange(e)} />

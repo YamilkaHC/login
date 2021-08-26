@@ -1,23 +1,43 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { gql } from "@apollo/client";
-import client from "../apollo-client";
-import {ApolloClient, InMemoryCache, ApolloProvider, useQuery, useMutation} from "@apollo/client";
-
+import { ApolloError, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
+import { useRouter } from 'next/router'
 
 
 const Form: any = () => {
+
+    const router = useRouter()
 
     const [data, setData] = useState({
         email: '',
         password: ''
     })
 
+    const PUSHUSER = gql`
+    mutation {
+        login(email: "${data.email}", password: "${data.password}"){
+            id
+        }
+     }
+    `;
+
     const [alert, setalert] = useState({
         state: 'no-alert',
         message: ''
     })
+
+    const [pushUser, { loading }] = useMutation(PUSHUSER, {
+
+        variables: { email: data.email, password: data.password },
+
+        onError: (e: ApolloError) => console.log({ e }),
+        onCompleted: () => {
+            console.log({success: 'hello world'})
+            router.push('/dashboard');
+        }
+    });
 
     const validation = (email: any, password: any) => {
         const re = /\S+@\S+\.\S+/;
@@ -39,6 +59,7 @@ const Form: any = () => {
             })
             return
         }
+        pushUser();
     }
 
     const handleSubmit = (e: any) => {
@@ -46,9 +67,6 @@ const Form: any = () => {
         e.preventDefault();
 
         validation(data.email, data.password)
-
-
-
     }
 
     const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -60,30 +78,34 @@ const Form: any = () => {
 
     }
 
+    if (loading) return 'Submitting...';
 
 
     return (
-      
-            <div className="wrapper fadeInDown">
-                <div id="formContent">
+
+        <div className="wrapper fadeInDown">
+            <div id="formContent">
 
 
-                    <form onSubmit={(e) => handleSubmit(e)}>
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmit(e)
+                }}>
 
-                        <input type="text" id="login" className="fadeIn second" name="email" placeholder="email" onChange={e => handleChange(e)} />
-                        <input type="text" id="password" className="fadeIn third" name="password" placeholder="password" onChange={e => handleChange(e)} />
-                        <p className={alert.state}>{alert.message}</p>
-                        <input type="submit" className="fadeIn fourth" value="LogIn" />
+                    <input type="text" id="login" className="fadeIn second" name="email" placeholder="email" onChange={e => handleChange(e)} />
+                    <input type="text" id="password" className="fadeIn third" name="password" placeholder="password" onChange={e => handleChange(e)} />
+                    <p className={alert.state}>{alert.message}</p>
+                    <input type="submit" className="fadeIn fourth" value="LogIn" />
 
-                        <p>You dont have an account?
-                            <Link href="/signin">
-                                <a> Sing In</a>
-                            </Link></p>
-                    </form>
-                </div>
+                    <p>You dont have an account?
+                        <Link href="/signin">
+                            <a> Sing In</a>
+                        </Link></p>
+                </form>
             </div>
+        </div>
 
-      
+
     )
 }
 
