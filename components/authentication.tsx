@@ -62,5 +62,5 @@ isNotAuthenticated function is used in regular pages where the user doesnt need 
 
 import { isAuthenticated } from '../components/authentication'
 
-export const getServerSideProps = isAuthenticated;
+(SECOND LINE) --> export const getServerSideProps = isAuthenticated;
 */

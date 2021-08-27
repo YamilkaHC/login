@@ -48,13 +48,16 @@ const dashboard = () => {
   `;
 
   /*OJO*/
-  /**/
+  /*This is a useQuery, this get the gql and other optionals parameters like [onError or onCompleted] 
+  between {} there are a destructuring with elements like [loading, error or data]
+  with useQuery we dont have a function to call it because useQuery execute automatically on render
+  */
   const { loading, data: dat }: any = useQuery(GETUSER)
 
-    /*OJO*/
-    /*This is a useMutation, this get the gql and other optionals parameters like [onError or onCompleted] 
-    between [] we get a function to call the mutation and a destructuring elements like [loading, error or data]
-    */
+  /*OJO*/
+  /*This is a useMutation, this get the gql and other optionals parameters like [onError or onCompleted] 
+  between [] we get a function to call the mutation and a destructuring elements like [loading, error or data]
+  */
   const [logout, { loading: loadingLogout, error: errorLogout }] = useMutation(LOGOUT, {
     onError: (e: ApolloError) => console.log({ e }),
     onCompleted: () => { router.reload(); }
