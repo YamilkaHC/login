@@ -1,53 +1,86 @@
 
 import Layout from '../components/layouts/Layout'
-import { ApolloError, gql, useSubscription } from "@apollo/client";
+import { useRouter } from 'next/router'
+import { ApolloError, gql } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { isAuthenticated } from '../components/authentication'
 
 export const getServerSideProps = isAuthenticated;
 
-const dashboard = ({ getUsers }: any) => {
+const dashboard = () => {
+
+  const router = useRouter()
 
   const [data, setData] = useState({
     name: '',
     email: ''
   })
 
-  const PUSHUSER = gql`
-  query me{
+  const GETUSER = gql`
+  query{
     me{
       id
       name
+      email
     }
   }
   `;
 
-  /*const { loading, error, data: dataQuery } = useQuery(PUSHUSER)
 
-  if (loading) return 'Loading...';
-  if (error) return `Error! ${error.message}`;
-*/
+  const LOGOUT = gql`
+  mutation {
+    LogOut
+  }
+  `;
+
+  const { loading, error, data: dat }: any = useQuery(GETUSER)
+  const [logout, { loading: loadingLogout, error: errorLogout }] = useMutation(LOGOUT, {
+    onError: (e: ApolloError) => console.log({ e }),
+
+    onCompleted: () => {
+      router.reload();
+    }
+  })
+
+  
+  useEffect(() => {
+    
+    if(!dat) return;
+
+    const { me: {  name, email } }: any = dat;
+
+
+    setData({
+      name,
+      email
+    })
+  },[loading, dat])
+
 
   return (
 
 
     <Layout titlePage={"Dashboard"}>
       <h1>Dashboard</h1>
-
-
       <div>
-        {getUsers.map(() => (
-          <div>
-            <p>
-              {getUsers.id}
-            </p>
-          </div>
-        ))}
+        <div className="data">
+          <h2>Name</h2>
+          <p>
+            {data.name}
+          </p>
+          <h2>Email</h2>
+          <p>
+            {data.email}
+          </p>
+        </div>
       </div>
 
-      <button>Log out</button>
+      <br />
+      <br />
+
+      <button onClick={() => logout()} >Log out</button>
     </Layout>
   )
 }

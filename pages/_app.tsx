@@ -1,11 +1,12 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import apolloclient from '../apollo-client'
-import { ApolloProvider } from "@apollo/client";
+import {useApollo} from '../apollo-client'
+import { ApolloClient, ApolloProvider } from "@apollo/client";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const apolloClient = useApollo(pageProps.initialApolloState, "http://localhost:4000/graphql");
   return (
-    <ApolloProvider client={apolloclient}>
+    <ApolloProvider client= {apolloClient}>
       <Component {...pageProps} />
     </ApolloProvider>
   )

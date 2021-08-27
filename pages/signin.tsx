@@ -12,7 +12,7 @@ const signin = () => {
   return (
 
     <Layout titlePage={"Login"}>
-      <h1>Sign In</h1>
+      <h1>Register</h1>
       <SignInForm />
     </Layout>
 

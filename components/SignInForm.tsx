@@ -2,12 +2,13 @@ import React from 'react'
 import { useState } from 'react'
 import { ApolloError, gql } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import Router from 'next/router'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 
 const SignInForm: any = () => {
 
+    const router = useRouter()
     
     const [Udata, setData] = useState({
         name: '',
@@ -39,7 +40,7 @@ const SignInForm: any = () => {
     const [pushUser, {  loading }] = useMutation(PUSHUSER, {
         variables: { name: Udata.name, email: Udata.email, password: Udata.password },
         onError: (e: ApolloError) => console.log({ e }),
-        onCompleted: () => console.log('success')
+        onCompleted: () => (console.log('success'), router.push('/'))
     }
     );
     
@@ -63,6 +64,13 @@ const SignInForm: any = () => {
             return
 
         } 
+        if (password.length < 6){
+            setalert({
+                state: 'alert',
+                message: 'You need to have 6 caracters minumun'
+            })
+            return
+        }
         if (!(/\d/.test(password))){
             setalert({
                 state: 'alert',
@@ -130,9 +138,9 @@ const SignInForm: any = () => {
                 }}>
                     <input type="text" id="name" className="fadeIn second" name="name" placeholder="name" onChange={e => handleChange(e)} />
                     <input type="text" id="login" className="fadeIn second" name="email" placeholder="email" onChange={e => handleChange(e)} />
-                    <input type="text" id="password" className="fadeIn third" name="password" placeholder="password" onChange={e => handleChange(e)} />
+                    <input type="password" id="password" className="fadeIn third" name="password" placeholder="password" onChange={e => handleChange(e)} />
                     <p className={alert.state}>{alert.message}</p>
-                    <input type="submit" className="fadeIn fourth" value="Sign In" />
+                    <input type="submit" className="fadeIn fourth" value="Register" />
                     <p>Do you have an account?
                         <Link href="/">
                             <a> Log In</a>

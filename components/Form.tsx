@@ -16,11 +16,11 @@ const Form: any = () => {
     })
 
     const PUSHUSER = gql`
-    mutation {
-        login(email: "${data.email}", password: "${data.password}"){
-            id
+        mutation {
+            login(email: "${data.email}", password: "${data.password}"){
+                id
+            }
         }
-     }
     `;
 
     const [pushUser, { loading }] = useMutation(PUSHUSER, {
@@ -29,8 +29,7 @@ const Form: any = () => {
 
         onError: (e: ApolloError) => console.log({ e }),
         onCompleted: () => {
-            console.log({success: 'hello world'})
-            router.push('/dashboard');
+            router.reload();
         }
     });
 
@@ -93,7 +92,7 @@ const Form: any = () => {
                 }}>
 
                     <input type="text" id="login" className="fadeIn second" name="email" placeholder="email" onChange={e => handleChange(e)} />
-                    <input type="text" id="password" className="fadeIn third" name="password" placeholder="password" onChange={e => handleChange(e)} />
+                    <input type="password" id="password" className="fadeIn third" name="password" placeholder="password" onChange={e => handleChange(e)} />
                     <p className={alert.state}>{alert.message}</p>
                     <input type="submit" className="fadeIn fourth" value="LogIn" />
 
@@ -104,7 +103,6 @@ const Form: any = () => {
                 </form>
             </div>
         </div>
-
 
     )
 }
