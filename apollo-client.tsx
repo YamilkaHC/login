@@ -1,13 +1,10 @@
 import { useMemo } from "react";
-import {
-    ApolloClient,
-    createHttpLink,
-    InMemoryCache,
-    NormalizedCacheObject,
-} from '@apollo/client';
-
+import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject, } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from "@apollo/client/link/error";
+
+
+
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
@@ -20,8 +17,10 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
  */
 export function createApolloClient(url: string, headers = {}) {
 
+    /*create a httpLink with the API url */
     const httpLink = createHttpLink({ uri: url });
 
+    /* */
     const errorLink = onError(({ graphQLErrors, networkError }) => {
         if (graphQLErrors)
             graphQLErrors.forEach(({ message, locations, path }) =>

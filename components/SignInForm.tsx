@@ -6,47 +6,41 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 
+
+/**
+ * Renders the SignInFom component
+ * @returns jXS Element
+ */
 const SignInForm: any = () => {
 
+    /* UseRouter is declaraded to redirector to another page*/
     const router = useRouter()
-    
+
+    /*This useState is used to save the user data from the form*/
     const [Udata, setData] = useState({
         name: '',
         email: '',
         password: ''
     })
 
-    const PUSHUSER = gql`
-    mutation {
-        register(
-            data:{
-                name: "${Udata.name}", 
-                email: "${Udata.email}", 
-                password: "${Udata.password}"
-            }) 
-            {
-          id
-          name
-          email
-        }   
-      }`;
-
-
+    /*This use state is to alert user about any error, this is uses in <p> classname,
+    its initial state is no-alert and this change into validation function */
     const [alert, setalert] = useState({
         state: 'no-alert',
         message: ''
     })
 
-    const [pushUser, {  loading }] = useMutation(PUSHUSER, {
-        variables: { name: Udata.name, email: Udata.email, password: Udata.password },
-        onError: (e: ApolloError) => console.log({ e }),
-        onCompleted: () => (console.log('success'), router.push('/'))
-    }
-    );
-    
+
+    /**
+     * this is the data validation, here I use Setalert to change the state 
+     * @param {any} name userName  
+     * @param {any} email userEmail
+     * @param {any} password userPassword
+     * @returns void
+     */
     const validation = (name: any, email: any, password: any) => {
         const re = /\S+@\S+\.\S+/;
-        const number =/\d/;
+        const number = /\d/;
 
         if (email == '' || password == '' || name == '') {
 
@@ -63,29 +57,29 @@ const SignInForm: any = () => {
             })
             return
 
-        } 
-        if (password.length < 6){
+        }
+        if (password.length < 6) {
             setalert({
                 state: 'alert',
                 message: 'You need to have 6 caracters minumun'
             })
             return
         }
-        if (!(/\d/.test(password))){
+        if (!(/\d/.test(password))) {
             setalert({
                 state: 'alert',
                 message: 'You need include numbers in your password'
             })
             return
         }
-        if (!(/[a-z]/.test(password))){
+        if (!(/[a-z]/.test(password))) {
             setalert({
                 state: 'alert',
                 message: 'You need include lowercase letter in your password'
             })
             return
         }
-        if (!(/[A-Z]/.test(password))){
+        if (!(/[A-Z]/.test(password))) {
             setalert({
                 state: 'alert',
                 message: 'You need include uppercase letter in your password'
@@ -93,7 +87,7 @@ const SignInForm: any = () => {
             return
         }
 
-        if (!(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password))){
+        if (!(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password))) {
             setalert({
                 state: 'alert',
                 message: 'You need include symbols in your password'
@@ -106,6 +100,39 @@ const SignInForm: any = () => {
 
     }
 
+    /*OJO*/
+    /*This is the mutation to send user data to API, this use the data useState*/
+    const PUSHUSER = gql`
+        mutation {
+            register(
+                data:{
+                    name: "${Udata.name}", 
+                    email: "${Udata.email}", 
+                    password: "${Udata.password}"
+                }) 
+                {
+              id
+              name
+              email
+            }   
+    }`;
+
+    /*OJO*/
+    /* */
+    const [pushUser, { loading }] = useMutation(PUSHUSER, {
+        variables: { name: Udata.name, email: Udata.email, password: Udata.password },
+        onError: (e: ApolloError) => console.log({ e }),
+        onCompleted: () => (console.log('success'), router.push('/'))
+    }
+    );
+
+    if (loading) return 'Submitting...';
+    redirectTo: '/login'
+
+    /**
+     * This was created because Enrique say "dont put these functions into the onSumit"
+     * @param {any} e  React event
+     */
     const handleSubmit = (e: any) => {
 
         e.preventDefault();
@@ -114,7 +141,14 @@ const SignInForm: any = () => {
 
     }
 
+    /*OJO*/
+    /**
+     * This function is to set data after the user write anything
+     * @param {React.FormEvent<HTMLInputElement>} e event form
+     */
     const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+        /*I use ...Udata frist because is necesary into all data to the same time but, here I am introducing
+         only 1 data*/
         setData({
             ...Udata,
             [e.currentTarget.name]: e.currentTarget.value
@@ -123,14 +157,9 @@ const SignInForm: any = () => {
 
     }
 
-    if (loading) return 'Submitting...';
-    redirectTo: '/login' 
-
     return (
-
         <div className="wrapper fadeInDown">
             <div id="formContent">
-
 
                 <form onSubmit={(e) => {
                     e.preventDefault();
@@ -148,8 +177,6 @@ const SignInForm: any = () => {
                 </form>
             </div>
         </div>
-
-
     )
 }
 

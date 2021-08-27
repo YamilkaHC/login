@@ -1,14 +1,17 @@
-import type { NextPage } from 'next'
 import React from 'react'
 import Head from 'next/head'
-import Script from 'next/script'
 
 
+/* the interface is to create a new data type*/
 interface dataLayout {
-    children: React.ReactNode;
+    children: React.ReactNode;/*ReactNode is used because into Layout will be html elements*/ 
     titlePage: string;
 }
 
+/**
+ * This is atemplete to create pages
+ * @returns jXS Element
+ */
 const Layout = ({ children, titlePage }: dataLayout) => {
 
 

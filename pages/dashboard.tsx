@@ -9,15 +9,26 @@ import { isAuthenticated } from '../components/authentication'
 
 export const getServerSideProps = isAuthenticated;
 
+
+
+
+/**
+ * Renders the dashboard page
+ * @returns jXS Element
+ */
 const dashboard = () => {
 
+  /* UseRouter is declaraded to redirector to another page*/
   const router = useRouter()
 
+  /*This useState is used to save the user data from the form*/
   const [data, setData] = useState({
     name: '',
     email: ''
   })
 
+  /*OJO*/
+  /*This is the query to recive user data to API*/
   const GETUSER = gql`
   query{
     me{
@@ -28,39 +39,42 @@ const dashboard = () => {
   }
   `;
 
-
+  /*OJO*/
+  /*This is the mutation to send log out to API*/
   const LOGOUT = gql`
   mutation {
     LogOut
   }
   `;
 
+  /*OJO*/
+  /**/
   const { loading, error, data: dat }: any = useQuery(GETUSER)
+
+  /*OJO*/
+  /**/
   const [logout, { loading: loadingLogout, error: errorLogout }] = useMutation(LOGOUT, {
     onError: (e: ApolloError) => console.log({ e }),
-
-    onCompleted: () => {
-      router.reload();
-    }
+    onCompleted: () => { router.reload(); }
   })
 
-  
+
+  /*OJO*/
+  /* useEffect is used because, the data cannot render in the page if there aren't data*/
   useEffect(() => {
-    
-    if(!dat) return;
 
-    const { me: {  name, email } }: any = dat;
+    if (!dat) return;
 
-
+    /*OJO */
+    const { me: { name, email } }: any = dat;
     setData({
       name,
       email
     })
-  },[loading, dat])
+  }, [loading, dat])
 
 
   return (
-
 
     <Layout titlePage={"Dashboard"}>
       <h1>Dashboard</h1>
