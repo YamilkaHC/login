@@ -7,7 +7,7 @@ export const getServerSideProps = isNotAuthenticated;
 
 /**
  * Renders the Sign In page
- * @returns jXS Element
+ * @returns JSX Element
  */
 const signin = () => {
 

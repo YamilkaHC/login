@@ -19,7 +19,7 @@ export const getServerSideProps = isAuthenticated;
 const dashboard = () => {
 
   /* UseRouter is declaraded to redirector to another page*/
-  const router = useRouter()
+  const router = useRouter();
 
   /*This useState is used to save the user data from the form*/
   const [data, setData] = useState({
@@ -49,10 +49,12 @@ const dashboard = () => {
 
   /*OJO*/
   /**/
-  const { loading, error, data: dat }: any = useQuery(GETUSER)
+  const { loading, data: dat }: any = useQuery(GETUSER)
 
-  /*OJO*/
-  /**/
+    /*OJO*/
+    /*This is a useMutation, this get the gql and other optionals parameters like [onError or onCompleted] 
+    between [] we get a function to call the mutation and a destructuring elements like [loading, error or data]
+    */
   const [logout, { loading: loadingLogout, error: errorLogout }] = useMutation(LOGOUT, {
     onError: (e: ApolloError) => console.log({ e }),
     onCompleted: () => { router.reload(); }
@@ -67,11 +69,13 @@ const dashboard = () => {
 
     /*OJO */
     const { me: { name, email } }: any = dat;
+
     setData({
       name,
       email
     })
-  }, [loading, dat])
+
+  }, [loading, dat]);
 
 
   return (

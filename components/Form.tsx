@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/client";
 import { useRouter } from 'next/router'
 
 /**
- * Renders the Fom component
+ * Renders the Form component
  * @returns jXS Element
  */
 const Form: any = () => {
@@ -57,7 +57,7 @@ const Form: any = () => {
     }
 
     /*OJO*/
-    /*This is the mutation to send user data to API, this use the data useState*/
+    /*This is the template mutation to send user data to API, this uses the data from the user state*/
     const PUSHUSER = gql`
         mutation {
             login(email: "${data.email}", password: "${data.password}"){
@@ -67,11 +67,11 @@ const Form: any = () => {
     `;
 
     /*OJO*/
-    /* */
+    /*This is a useMutation, this get the gql and other optionals parameters like [onError or onCompleted] 
+    between [] we get a function to call the mutation and a destructuring elements like [loading, error or data]
+    */
     const [pushUser, { loading }] = useMutation(PUSHUSER, {
-
-        variables: { email: data.email, password: data.password },
-
+        // variables: { email: data.email, password: data.password },
         onError: (e: ApolloError) => console.log({ e }),
         onCompleted: () => {
             router.reload();
@@ -80,7 +80,8 @@ const Form: any = () => {
     if (loading) return 'Submitting...';
 
     /**
-     * This was created because Enrique say "dont put these functions into the onSumit"
+     * This was created because Enrique says "dont put these functions into the onSumit"
+     * Handles the submit event
      * @param {any} e  React event
      */
     const handleSubmit = (e: any) => {
@@ -92,7 +93,7 @@ const Form: any = () => {
 
     /*OJO*/
     /**
-     * This function is to set data after the user write anything
+     * This function is to set data after the user writes anything
      * @param {React.FormEvent<HTMLInputElement>} e event form
      */
     const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -107,17 +108,11 @@ const Form: any = () => {
     return (
         <div className="wrapper fadeInDown">
             <div id="formContent">
-
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSubmit(e)
-                }}>
-
+                <form onSubmit={(e) => handleSubmit(e)}>
                     <input type="text" id="login" className="fadeIn second" name="email" placeholder="email" onChange={e => handleChange(e)} />
                     <input type="password" id="password" className="fadeIn third" name="password" placeholder="password" onChange={e => handleChange(e)} />
                     <p className={alert.state}>{alert.message}</p>
                     <input type="submit" className="fadeIn fourth" value="LogIn" />
-
                     <p>You dont have an account? 
                         <Link href="/signin">
                             <a> Sing In</a>

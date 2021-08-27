@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 
 /**
  * Renders the SignInFom component
- * @returns jXS Element
+ * @returns JSX Element
  */
 const SignInForm: any = () => {
 
@@ -118,9 +118,11 @@ const SignInForm: any = () => {
     }`;
 
     /*OJO*/
-    /* */
+    /*This is a useMutation, this get the gql and other optionals parameters like [onError or onCompleted] 
+    between [] we get a function to call the mutation and a destructuring elements like [loading, error or data]
+    */
     const [pushUser, { loading }] = useMutation(PUSHUSER, {
-        variables: { name: Udata.name, email: Udata.email, password: Udata.password },
+       // variables: { name: Udata.name, email: Udata.email, password: Udata.password },
         onError: (e: ApolloError) => console.log({ e }),
         onCompleted: () => (console.log('success'), router.push('/'))
     }
@@ -160,11 +162,7 @@ const SignInForm: any = () => {
     return (
         <div className="wrapper fadeInDown">
             <div id="formContent">
-
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSubmit(e);
-                }}>
+                <form onSubmit={(e) => handleSubmit(e)}>
                     <input type="text" id="name" className="fadeIn second" name="name" placeholder="name" onChange={e => handleChange(e)} />
                     <input type="text" id="login" className="fadeIn second" name="email" placeholder="email" onChange={e => handleChange(e)} />
                     <input type="password" id="password" className="fadeIn third" name="password" placeholder="password" onChange={e => handleChange(e)} />

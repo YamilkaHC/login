@@ -58,7 +58,7 @@ export { isAuthenticated, isNotAuthenticated }
 /*
 If i want to use these functions, I need to import it and use the second line.
 isAuthenticated function is used in pages with a session like [dashboard] and
-isNotAuthenticated function is used in regular pages where the user dont need a session to be there.
+isNotAuthenticated function is used in regular pages where the user doesnt need a session to be there.
 
 import { isAuthenticated } from '../components/authentication'
 
